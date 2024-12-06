@@ -19,10 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, VIDEO_DIR); // Save files in the video directory
+    cb(null, VIDEO_DIR); 
   },
   filename: (req, file, cb) => {
-    const timestamp = Date.now(); // Generate a timestamp
+    const timestamp = Date.now(); 
     const filename = `video_${timestamp}${path.extname(file.originalname)}`; // Append the original extension
     cb(null, filename);
   },
@@ -30,8 +30,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ dest: "videos/", storage });
 
-// Routes
-// 1. Upload video
+
 app.post("/api/record", upload.single("video"), (req, res) => {
   res.json({
     message: "Video uploaded successfully!",
@@ -39,7 +38,6 @@ app.post("/api/record", upload.single("video"), (req, res) => {
   });
 });
 
-// 2. Get list of videos
 app.get("/api/videos", (req, res) => {
   const files = fs.readdirSync("videos/").map((file) => ({
     name: file,
@@ -49,7 +47,6 @@ app.get("/api/videos", (req, res) => {
   res.json(files);
 });
 
-// 3. Stream specific video
 app.get("/api/video/:id", (req, res) => {
   const videoPath = path.join(cwd(), "videos", req.params.id);
   if (fs.existsSync(videoPath)) {
@@ -63,7 +60,6 @@ app.get("*", (req, res) => {
   res.sendFile("index.html", { root: client_url });
 });
 
-// Start server
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
