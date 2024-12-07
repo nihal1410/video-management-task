@@ -63,3 +63,21 @@ app.get("*", (req, res) => {
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
+
+
+app.delete("/api/videos/:name", (req, res) => {
+  const videoName = req.params.name;
+  const videoPath = path.join(VIDEO_DIR, videoName);
+
+  if (fs.existsSync(videoPath)) {
+    fs.unlink(videoPath, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+        return res.status(500).json({ error: "Failed to delete video." });
+      }
+      return res.status(200).json({ message: "Video deleted successfully." });
+    });
+  } else {
+    return res.status(404).json({ error: "Video not found." });
+  }
+});
