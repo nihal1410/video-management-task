@@ -10,6 +10,10 @@ dotenv.config();
 const PORT = process.env.PORT || 8080;
 const VIDEO_DIR = path.join(cwd(), "videos");
 
+if (!fs.existsSync(VIDEO_DIR)) {
+  fs.mkdirSync(VIDEO_DIR, { recursive: true });
+}
+
 const app = express();
 const client_url = path.join(cwd(), "client", "dist");
 app.use(cors());
